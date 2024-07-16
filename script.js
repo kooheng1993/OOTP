@@ -34,19 +34,27 @@ function copyCodeToClipboard() {
     showAlert('2FA code copied to clipboard!');
 }
 
-
 function startProgressBar(secret) {
-    let width = 0;
     const progressBar = document.getElementById('progress-bar');
-    const interval = setInterval(() => {
-        if (width >= 100) {
-            clearInterval(interval);
-            updateTOTP(secret);
-        } else {
-            width += 1;
-            progressBar.style.width = width + '%';
+    const totpInterval = 30; // TOTP codes are valid for 30 seconds
+    let timeLeft = totpInterval;
+
+    // Clear any existing intervals
+    if (window.progressInterval) {
+        clearInterval(window.progressInterval);
+    }
+
+    // Update progress bar and countdown every second
+    window.progressInterval = setInterval(() => {
+        timeLeft--;
+        const width = ((totpInterval - timeLeft) / totpInterval) * 100;
+        progressBar.style.width = width + '%';
+
+        if (timeLeft <= 0) {
+            clearInterval(window.progressInterval);
+            updateTOTP(secret); // Update TOTP code every 30 seconds
         }
-    }, 300);
+    }, 1000);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
