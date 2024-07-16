@@ -30,3 +30,5 @@ document.addEventListener('DOMContentLoaded', () => {
     const secret = getSecretFromURL();
     if(secret) updateTOTP(secret);
 });
+
+
