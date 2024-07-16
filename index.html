@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2FA Code Display</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>2FA TOTP Code</h1>
+        <div id="totp-container">
+            <span id="totp-code">Loading...</span>
+        </div>
+        <div class="progress-bar-container">
+            <div id="progress-bar"></div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/otplib@12.0.1/otplib.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
