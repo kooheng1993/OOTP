@@ -36,6 +36,7 @@ function copyCodeToClipboard() {
 
 function startProgressBar(secret) {
     const progressBar = document.getElementById('progress-bar');
+    const countdownElement = document.getElementById('countdown');
     const totpInterval = 30; // TOTP codes are valid for 30 seconds
     let timeLeft = totpInterval;
 
@@ -47,6 +48,7 @@ function startProgressBar(secret) {
     // Update progress bar and countdown every second
     window.progressInterval = setInterval(() => {
         timeLeft--;
+        countdownElement.textContent = `Time left: ${timeLeft}s`;
         const width = ((totpInterval - timeLeft) / totpInterval) * 100;
         progressBar.style.width = width + '%';
 
@@ -65,4 +67,6 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log("No secret key provided.");
         document.getElementById('totp-code').textContent = "No Secret Key Provided";
     }
+
+    document.getElementById('totp-code').addEventListener('click', copyCodeToClipboard);
 });
