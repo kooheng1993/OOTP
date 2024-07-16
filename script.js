@@ -34,11 +34,27 @@ function copyCodeToClipboard() {
     showAlert('2FA code copied to clipboard!');
 }
 
+function showAlert(message) {
+    const alertBox = document.createElement('div');
+    alertBox.textContent = message;
+    alertBox.className = 'alert-box';
+    document.body.appendChild(alertBox);
+
+    setTimeout(() => {
+        document.body.removeChild(alertBox);
+    }, 2000);
+}
+
 function startProgressBar(secret) {
     const progressBar = document.getElementById('progress-bar');
     const countdownElement = document.getElementById('countdown');
-    const totpInterval = 30; // TOTP codes are valid for 30 seconds
-    let timeLeft = totpInterval;
+    const totpInterval = authenticator.allOptions().step;
+    const startTime = Math.floor(Date.now() / 1000);
+    const timeLeft = totpInterval - (startTime % totpInterval);
+
+    let timeRemaining = timeLeft;
+
+    countdownElement.textContent = `Time left: ${timeRemaining}s`;
 
     // Clear any existing intervals
     if (window.progressInterval) {
@@ -47,14 +63,14 @@ function startProgressBar(secret) {
 
     // Update progress bar and countdown every second
     window.progressInterval = setInterval(() => {
-        timeLeft--;
-        countdownElement.textContent = `Time left: ${timeLeft}s`;
-        const width = ((totpInterval - timeLeft) / totpInterval) * 100;
+        timeRemaining--;
+        countdownElement.textContent = `Time left: ${timeRemaining}s`;
+        const width = ((timeLeft - timeRemaining) / timeLeft) * 100;
         progressBar.style.width = width + '%';
 
-        if (timeLeft <= 0) {
+        if (timeRemaining <= 0) {
             clearInterval(window.progressInterval);
-            updateTOTP(secret); // Update TOTP code every 30 seconds
+            updateTOTP(secret); // Update TOTP code every interval
         }
     }, 1000);
 }
