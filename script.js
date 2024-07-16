@@ -48,7 +48,7 @@ function showAlert(message) {
 function startProgressBar(secret) {
     const progressBar = document.getElementById('progress-bar');
     const countdownElement = document.getElementById('countdown');
-    const totpInterval = authenticator.allOptions().step;
+    const totpInterval = authenticator.options.step || 30; // Default step is 30 seconds
     const startTime = Math.floor(Date.now() / 1000);
     const timeLeft = totpInterval - (startTime % totpInterval);
 
