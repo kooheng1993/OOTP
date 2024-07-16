@@ -20,6 +20,21 @@ function updateTOTP(secret) {
     }
 }
 
+function copyCodeToClipboard() {
+    const codeElement = document.getElementById('totp-code');
+    const code = codeElement.textContent;
+
+    const textarea = document.createElement('textarea');
+    textarea.value = code;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+
+    showAlert('2FA code copied to clipboard!');
+}
+
+
 function startProgressBar(secret) {
     let width = 0;
     const progressBar = document.getElementById('progress-bar');
