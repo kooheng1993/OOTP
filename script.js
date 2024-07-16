@@ -2,14 +2,22 @@ const { authenticator } = otplib;
 
 function getSecretFromURL() {
     const queryParams = new URLSearchParams(window.location.search);
-    return queryParams.get('secret');
+    const secret = queryParams.get('secret');
+    console.log("Retrieved secret:", secret);  // Debug log
+    return secret;
 }
 
 function updateTOTP(secret) {
-    const totpCode = authenticator.generate(secret);
-    document.getElementById('totp-code').textContent = totpCode;
-    document.getElementById('progress-bar').style.width = '0';
-    startProgressBar(secret);
+    try {
+        const totpCode = authenticator.generate(secret);
+        document.getElementById('totp-code').textContent = totpCode;
+        console.log("Generated TOTP code:", totpCode);  // Debug log
+        document.getElementById('progress-bar').style.width = '0';
+        startProgressBar(secret);
+    } catch (error) {
+        console.error("Error generating TOTP:", error);
+        document.getElementById('totp-code').textContent = "Error in TOTP Generation";
+    }
 }
 
 function startProgressBar(secret) {
@@ -28,5 +36,10 @@ function startProgressBar(secret) {
 
 document.addEventListener('DOMContentLoaded', () => {
     const secret = getSecretFromURL();
-    if(secret) updateTOTP(secret);
+    if (secret) {
+        updateTOTP(secret);
+    } else {
+        console.log("No secret key provided.");
+        document.getElementById('totp-code').textContent = "No Secret Key Provided";
+    }
 });
