@@ -1,4 +1,3 @@
-// Import the otplib module (TOTP library)
 const { authenticator } = otplib;
 
 function getSecretFromURL() {
